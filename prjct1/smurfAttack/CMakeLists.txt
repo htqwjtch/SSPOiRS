@@ -1,0 +1,30 @@
+
+cmake_minimum_required(VERSION 3.30)
+
+project(smurfAttack)
+
+# Main target
+add_executable(
+    ${PROJECT_NAME}
+    src/exceptionService/exceptionservice.h
+    src/exceptionService/exceptionservice.cpp
+    src/pingService/pingservice.h
+    src/pingService/pingservice.cpp
+    src/threadService/threadservice.h
+    src/threadService/threadservice.cpp
+    src/main.cpp
+)
+
+if (MSVC)
+    target_compile_options(
+        # flags for additional logging
+        ${PROJECT_NAME} PRIVATE
+        /W4
+    )
+else()
+    target_compile_options(
+        # flags for additional logging
+        ${PROJECT_NAME} PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+endif()
