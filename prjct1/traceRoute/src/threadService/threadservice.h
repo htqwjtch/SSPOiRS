@@ -2,4 +2,4 @@
 
 #include "../tracerouteService/tracerouteservice.h"
 
-void run_thread(int, char**);
+void run_thread(int, char**, int);

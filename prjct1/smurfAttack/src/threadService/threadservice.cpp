@@ -2,7 +2,6 @@
 
 void run_thread(int argc, char** argv) {
     SOCKET socket = INVALID_SOCKET;
-    SOCKADDR_IN sourceAddress;
     try {
         check_command_line_arguments(argc);
         WSADATA wsaData;
@@ -15,8 +14,8 @@ void run_thread(int argc, char** argv) {
         set_sockaddr_in(sourceAddress, argv[1]);
         SOCKADDR_IN destinationAddress;
         set_sockaddr_in(destinationAddress, argv[2]);
-        std::string packetAmountForThreadString = std::string(argv[3]);
-        int packetAmountForThread = std::stoi(packetAmountForThreadString);
+        // std::string packetAmountForThreadString = std::string(argv[3]);
+        // int packetAmountForThread = std::stoi(packetAmountForThreadString);
         std::cout << "\nPing to " << argv[1] << "\n";
         ping(socket, sourceAddress, destinationAddress, 0);
         std::cout << "\nPing finished\n";

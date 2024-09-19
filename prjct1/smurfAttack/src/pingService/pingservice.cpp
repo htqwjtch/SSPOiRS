@@ -6,13 +6,13 @@
 #include <cstdint>
 
 void check_command_line_arguments(int argc) {
-    if (argc < 5) {
+    if (argc < 4) {
         std::string exceptionInfo =
             "There are not enough command line arguments: ";
         std::string exceptionReasons = "";
         switch (argc) {
-            case 4:
-                exceptionReasons = ", packet amount for each thread";
+            // case 4:
+            //     exceptionReasons = ", packet amount for each thread";
             case 3:
                 exceptionReasons = ", thread amount" + exceptionReasons;
             case 2:
@@ -86,10 +86,8 @@ void ping(SOCKET& socket, SOCKADDR_IN& sourceAddress,
           SOCKADDR_IN& destinationAddress, int packetAmount) {
     char requestPacket[sizeof(struct IPHeader) + sizeof(struct ICMPHeader)]{};
 
-    int seqNumber = 0;
-
     set_request_packet(requestPacket, sourceAddress, destinationAddress);
-    while (packetAmount--) {
+    while (1) {
         int sentBytes = send_request_packet(
             socket, requestPacket, sizeof(IPHeader) + sizeof(ICMPHeader),
             destinationAddress);
@@ -109,13 +107,13 @@ void set_request_packet(char* requestPacket, SOCKADDR_IN& sourceAddress,
         (struct ICMPHeader*)(requestPacket + sizeof(struct IPHeader));
 
     memset(ipHeader, 0, sizeof(IPHeader));
-    ipHeader->version_IHL =
+    ipHeader->versionAndHeaderLength =
         (4 << 4) |
         (sizeof(IPHeader) / sizeof(unsigned long));  // IPv4 и длина заголовка
     ipHeader->typeOfService = 0;  // Обычный тип сервиса
     ipHeader->totalLength = htons(sizeof(IPHeader));  // Полная длина пакета
     ipHeader->identification = htons(54321);  // Идентификатор пакета
-    ipHeader->flags_fragmentOffset =
+    ipHeader->flagsAndFragmentOffset =
         0;  // Флаги (DF = 0, MF = 0) и смещение фрагмента
     ipHeader->timeToLive = 128;         // Время жизни (TTL)
     ipHeader->protocol = IPPROTO_ICMP;  // Протокол ICMP

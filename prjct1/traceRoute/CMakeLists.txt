@@ -7,8 +7,8 @@ add_executable(
     ${PROJECT_NAME}
     src/exceptionService/exceptionservice.h
     src/exceptionService/exceptionservice.cpp
-    src/pingService/pingservice.h
-    src/pingService/pingservice.cpp
+    src/tracerouteService/tracerouteservice.h
+    src/tracerouteService/tracerouteservice.cpp
     src/threadService/threadservice.h
     src/threadService/threadservice.cpp
     src/main.cpp

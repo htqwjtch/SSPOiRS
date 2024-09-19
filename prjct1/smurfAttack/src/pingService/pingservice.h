@@ -9,28 +9,27 @@
 
 #include "../exceptionService/exceptionservice.h"
 
-
 #pragma comment(lib, "ws2_32.lib")
 
 struct IPHeader {
-    unsigned char version_IHL;  // Версия и длина заголовка
-    unsigned char typeOfService;    // Тип сервиса
-    unsigned short totalLength;     // Полная длина пакета
-    unsigned short identification;  // Идентификатор
-    unsigned short flags_fragmentOffset;  // Флаги и смещение фрагмента
-    unsigned char timeToLive;  // Время жизни (TTL)
-    unsigned char protocol;    // Протокол (TCP, UDP и т.д.)
-    unsigned short headerChecksum;  // Контрольная сумма заголовка
-    unsigned long sourceAddress;       // IP-адрес отправителя
-    unsigned long destinationAddress;  // IP-адрес получателя
+    uint8_t versionAndHeaderLength;
+    uint8_t typeOfService;
+    uint16_t totalLength;
+    uint16_t identification;
+    uint16_t flagsAndFragmentOffset;
+    uint8_t timeToLive;
+    uint8_t protocol;
+    uint16_t headerChecksum;
+    uint32_t sourceAddress;
+    uint32_t destinationAddress;
 };
 
 struct ICMPHeader {
-    uint8_t messageType;       // 8 bits
-    uint8_t messageCode;       // 8 bits
-    uint16_t messageCheckSum;  // 16 bits
-    uint16_t identificator;    // 16 bits
-    uint16_t sequenceNumber;   // 16 bits
+    uint8_t messageType;
+    uint8_t messageCode;
+    uint16_t messageCheckSum;
+    uint16_t identificator;
+    uint16_t sequenceNumber;
 };
 
 void check_command_line_arguments(int);
