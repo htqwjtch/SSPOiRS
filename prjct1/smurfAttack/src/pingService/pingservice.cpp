@@ -84,17 +84,18 @@ void set_sockaddr_in(SOCKADDR_IN& address, char* hostName) {
 
 void ping(SOCKET& socket, SOCKADDR_IN& sourceAddress,
           SOCKADDR_IN& destinationAddress, int packetAmount) {
-    char requestPacket[sizeof(struct IPHeader) + sizeof(struct ICMPHeader)]{};
+    char data[1024];
+    char requestPacket[sizeof(struct IPHeader) + sizeof(struct ICMPHeader) +
+                       sizeof(data)]{};
 
     set_request_packet(requestPacket, sourceAddress, destinationAddress);
     while (1) {
         int sentBytes = send_request_packet(
-            socket, requestPacket, sizeof(IPHeader) + sizeof(ICMPHeader),
+            socket, requestPacket, sizeof(IPHeader) + sizeof(ICMPHeader) + 1024,
             destinationAddress);
         if (sentBytes == -2) {
             std::cout << "\ttime to send packet has been exceeded\n";
         }
-        Sleep(100);
     }
 }
 
@@ -105,13 +106,15 @@ void set_request_packet(char* requestPacket, SOCKADDR_IN& sourceAddress,
     struct IPHeader* ipHeader = (struct IPHeader*)requestPacket;
     struct ICMPHeader* icmpHeader =
         (struct ICMPHeader*)(requestPacket + sizeof(struct IPHeader));
-
+    char* data =
+        requestPacket + sizeof(struct IPHeader) + sizeof(struct ICMPHeader);
     memset(ipHeader, 0, sizeof(IPHeader));
     ipHeader->versionAndHeaderLength =
         (4 << 4) |
         (sizeof(IPHeader) / sizeof(unsigned long));  // IPv4 и длина заголовка
     ipHeader->typeOfService = 0;  // Обычный тип сервиса
-    ipHeader->totalLength = htons(sizeof(IPHeader));  // Полная длина пакета
+    ipHeader->totalLength = htons(sizeof(IPHeader) + sizeof(ICMPHeader) +
+                                  1024);  // Полная длина пакета
     ipHeader->identification = htons(54321);  // Идентификатор пакета
     ipHeader->flagsAndFragmentOffset =
         0;  // Флаги (DF = 0, MF = 0) и смещение фрагмента
@@ -131,6 +134,8 @@ void set_request_packet(char* requestPacket, SOCKADDR_IN& sourceAddress,
     icmpHeader->sequenceNumber = htons(1);  // Порядковый номер
     icmpHeader->messageCheckSum =
         calculate_check_sum((uint16_t*)icmpHeader, sizeof(ICMPHeader));
+
+    memset(data, 0, 1024);
 }
 
 uint16_t calculate_check_sum(uint16_t* data, int dataSize) {

@@ -4,7 +4,7 @@
 #include "threadService/threadservice.h"
 
 int main(int argc, char** argv) {
-    std::string threadAmountString = std::string(argv[2]);
+    std::string threadAmountString = std::string(argv[3]);
     const int threadAmount = std::stoi(threadAmountString);
     std::vector<std::thread> threads;
     for (int i = 0; i < threadAmount; i++) {
