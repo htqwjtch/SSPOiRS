@@ -38,3 +38,7 @@ build/
 
 #Other
 .cache
+
+# Rust
+target/
+Cargo.lock
